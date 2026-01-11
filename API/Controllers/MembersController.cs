@@ -1,13 +1,11 @@
 using dating_app.Data;
 using dating_app.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dating_app.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MembersController(AppDbContext context) : ControllerBase
+ 
+    public class MembersController(AppDbContext context) : BaseApiConroller
     {
         [HttpGet]
         public ActionResult<IReadOnlyList<AppUser>> GetMembers()

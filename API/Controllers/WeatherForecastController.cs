@@ -4,7 +4,7 @@ namespace dating_app.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class WeatherForecastController : BaseApiConroller
 {
     private static readonly string[] Summaries = new[]
     {

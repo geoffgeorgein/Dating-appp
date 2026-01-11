@@ -1,4 +1,6 @@
 using dating_app.Data;
+using dating_app.Interfaces;
+using dating_app.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 builder.Services.AddCors();
+builder.Services.AddScoped<ITokenService,TokenService>();
 
 var app = builder.Build();
 
