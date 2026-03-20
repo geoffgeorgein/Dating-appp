@@ -3,6 +3,7 @@ using System.Text;
 using dating_app.Data;
 using dating_app.DTOs;
 using dating_app.Entities;
+using dating_app.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,10 @@ namespace dating_app.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(AppDbContext context) : BaseApiConroller
+    public class AccountController(AppDbContext context,ITokenService tokenService) : BaseApiConroller
     {
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> Register(string email, string displayName, string password)
+        public async Task<ActionResult<UserDto>> Register(string email, string displayName, string password)
         {
             var hmac=new HMACSHA512();
 
@@ -28,11 +29,18 @@ namespace dating_app.Controllers
             };
             context.Users.Add(user);
 
-            return user;
+            return new UserDto
+            {
+                Id = user.Id,
+                DisplayName =user.DisplayName,
+                Email = user.Email,
+                Token = tokenService.CreateToken(user)
+            }
+            ;
     }
 
     [HttpPost]
-    public async Task<ActionResult<AppUser>>Login(Login logindto)
+    public async Task<ActionResult<UserDto>>Login(Login logindto)
         {
             var user = await context.Users.FirstOrDefaultAsync(x =>x.Email ==  logindto.Email);
 
@@ -47,7 +55,14 @@ namespace dating_app.Controllers
                 if(computedHash[i] != user.PasswordHash[i] ) return Unauthorized("Invalid password");
             }
 
-            return user;
+            return new UserDto
+            {
+                Id = user.Id,
+                DisplayName =user.DisplayName,
+                Email = user.Email,
+                Token = tokenService.CreateToken(user)
+            }
+            ;
         }
     }
 }
