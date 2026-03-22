@@ -1,5 +1,6 @@
 using dating_app.Data;
 using dating_app.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dating_app.Controllers
@@ -15,7 +16,7 @@ namespace dating_app.Controllers
 
             return members;
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult<AppUser> GetMember(string id)
         {
